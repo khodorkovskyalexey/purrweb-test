@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './user.entity';
@@ -14,8 +15,9 @@ export class UsersController {
         return await this.usersService.getAll()
     }
 
-    @Get(':id')
-    async getUserById(@Param('id') id: string): Promise<User> {
+    @UseGuards(JwtAuthGuard)
+    @Get(':user_id')
+    async getUserById(@Param('user_id') id: string): Promise<User> {
         return await this.usersService.getById(id)
     }
 
@@ -25,14 +27,16 @@ export class UsersController {
         return this.usersService.create(user)
     }
 
-    @Delete(':id')
-    async deleteUser(@Param('id') id: string) {
+    @UseGuards(JwtAuthGuard)
+    @Delete(':user_id')
+    async deleteUser(@Param('user_id') id: string) {
         return await this.usersService.delete(id)
     }
 
+    @UseGuards(JwtAuthGuard)
     @UsePipes(ValidationPipe)
-    @Put(':id')
-    async updateUser(@Param('id') id: string, @Body() user: CreateUserDto) {
+    @Put(':user_id')
+    async updateUser(@Param('user_id') id: string, @Body() user: CreateUserDto) {
         return await this.usersService.update(id, user)
     }
 }
