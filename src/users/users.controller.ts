@@ -21,8 +21,8 @@ export class UsersController {
 
     @UsePipes(ValidationPipe)
     @Post()
-    async createUser(@Body() user: CreateUserDto) {
-        return await this.usersService.create(user)
+    async createUser(@Body() user: CreateUserDto): Promise<User> {
+        return this.usersService.create(user)
     }
 
     @Delete(':id')
