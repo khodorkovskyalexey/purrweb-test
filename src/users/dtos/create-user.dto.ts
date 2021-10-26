@@ -7,5 +7,5 @@ export class CreateUserDto {
 
   @IsString({ message: "Must be string" })
   @Length(4, 16, { message: "Must be from 4 to 16" })
-  readonly password: string
+  password: string
 }
