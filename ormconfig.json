@@ -1,0 +1,11 @@
+{
+   "type": "postgres",
+   "host": "fanny.db.elephantsql.com",
+   "port": 5432,
+   "username": "mjfeozth",
+   "password": "7pEKjM3048tAQ5DN7jcPFz47hh07GUjT",
+   "database": "mjfeozth",
+   "entities": ["dist/**/*.entity{.ts,.js}"],
+   "synchronize": true,
+   "autoLoadEntities": true
+ }
