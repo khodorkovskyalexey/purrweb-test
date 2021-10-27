@@ -5,7 +5,6 @@ import { ColumnsService } from './columns.service';
 import { CreateColumnDto } from './dto/create-columns.dto';
 import { UserColumnsGuard } from './user-columns.guard';
 
-//по тз
 @Controller('users/:user_id/columns')
 export class ColumnsController {
     constructor(private readonly columnsService: ColumnsService) {
@@ -16,7 +15,7 @@ export class ColumnsController {
         return this.columnsService.findUsersColumns(user_id)
     }
 
-    // ДОБАВИТЬ ПРОВЕРКУ ВЛАДЕЕТ ЛИ ПОЛЬЗОВАТЕЛЬ ЭТОЙ КОЛОНКОЙ
+    @UseGuards(UserColumnsGuard)
     @Get(':column_id')
     async findUserColumnById(@Param('column_id') column_id: string): Promise<Columns> {
         return this.columnsService.findById(column_id)

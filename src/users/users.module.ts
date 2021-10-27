@@ -22,6 +22,6 @@ import { ColumnsModule } from 'src/columns/columns.module';
     ],
     controllers: [UsersController],
     providers: [UsersService, AuthService],
-    exports: [UsersService, JwtModule]
+    exports: [UsersService, AuthService, JwtModule]
 })
 export class UserModule {}
