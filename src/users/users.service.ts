@@ -16,10 +16,8 @@ export class UsersService {
         private readonly authService: AuthService
         ) {}
 
-    async findAll(): Promise<Users[]> {
-        return await this.usersRepository.find({
-            relations: ["columns"]
-        });
+    async findAll(options = {}): Promise<Users[]> {
+        return await this.usersRepository.find(options);
     }
 
     async findById(id: string): Promise<Users> {

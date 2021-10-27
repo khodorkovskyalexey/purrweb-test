@@ -11,7 +11,9 @@ export class UsersController {
 
     @Get()
     async findAll(): Promise<Users[]> {
-        return await this.usersService.findAll()
+        return await this.usersService.findAll({
+            relations: ["columns", "columns.cards"]
+        })
     }
 
     @Get(':user_id')
@@ -19,6 +21,7 @@ export class UsersController {
         return await this.usersService.findById(id)
     }
 
+    //по тз
     @Post()
     async register(@Body() user: CreateUserDto): Promise<AuthUsersDto> {
         return this.usersService.create(user)
