@@ -4,6 +4,7 @@ import { CheckJwtGuard } from 'src/users/check-jwt.guatd';
 import { JwtAuthGuard } from 'src/users/jwt-auth.guard';
 import { Cards } from './cards.entity';
 import { CardsService } from './cards.service';
+import { ColumnCardsGuard } from './column-cards.guard';
 import { CreateCardDto } from './dto/create-card.dto';
 
 @Controller('columns/:column_id/cards')
@@ -21,7 +22,7 @@ export class CardsController {
         return this.cardsService.findAll(column_id)
     }
 
-    // ДОБАВИТЬ ПРОВЕРКУ ВХОДИТ ЛИ КАРТА В ДАННУЮ КОЛОНКУ
+    @UseGuards(ColumnCardsGuard)
     @Get(':card_id')
     async findOneCardInColumn(@Param('card_id') card_id: string) {
         return this.cardsService.findById(card_id)
