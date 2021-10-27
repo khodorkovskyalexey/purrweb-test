@@ -27,8 +27,8 @@ export class CardsService {
         } });
     }
 
-    async findById(card_id: string): Promise<Cards> {
-        return await this.cardsRepository.findOne(card_id);
+    async findById(card_id: string, options = {}): Promise<Cards> {
+        return await this.cardsRepository.findOne(card_id, options);
     }
 
     async update(card_id: string, cardDto: CreateCardDto): Promise<CreateCardDto> {

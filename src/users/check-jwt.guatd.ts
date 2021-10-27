@@ -5,7 +5,7 @@ import { AuthException } from "../exceptions/auth.exception";
 import { Users } from "./user.entity";
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class CheckJwtGuard implements CanActivate {
     constructor(private jwtService: JwtService) {
     }
 
@@ -21,12 +21,6 @@ export class JwtAuthGuard implements CanActivate {
             }
 
             const user: Users = this.jwtService.verify(token);
-            const user_id: string = req.params.user_id
-            const isIdEquals: boolean = user.id === Number(user_id)
-
-            if(!user_id || !isIdEquals) {
-                throw AuthException.UnauthorizedError();
-            }
             req.user = user;
 
             return true;
