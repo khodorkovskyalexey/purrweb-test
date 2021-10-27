@@ -33,7 +33,7 @@ export class CommentsController {
     @ApiOperation({ summary: 'Get one comments by id' })
     @ApiResponse({ status: 200, type: Comments })
     @Get(':comment_id')
-    async findOnde(@Param('comment_id') comment_id: string): Promise<Comments> {
+    async findOne(@Param('comment_id') comment_id: string): Promise<Comments> {
         return this.commentsService.findById(comment_id, { relations: ["author"] });
     }
     
@@ -45,10 +45,10 @@ export class CommentsController {
     @Post()
     async create(
         @Body() comment: CreateCommentsDto,
-        @Param('comment_id') comment_id: string,
+        @Param('card_id') card_id: string,
         @User() user: Users
     ): Promise<CreateCommentsDto> {
-        return this.commentsService.create(user, comment_id, comment);
+        return this.commentsService.create(user, card_id, comment);
     }
     
     @ApiParam({ name: 'column_id', description: 'Id cards column', example: '1' })
