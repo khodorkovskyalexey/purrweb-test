@@ -26,11 +26,13 @@ export class CardsController {
         return this.cardsService.findById(card_id)
     }
 
+    @UseGuards(JwtAuthGuard, UserColumnsGuard)
     @Delete(':card_id')
     async delete(@Param('card_id') card_id: string): Promise<boolean> {
         return this.cardsService.delete(card_id)
     }
 
+    @UseGuards(JwtAuthGuard, UserColumnsGuard)
     @Put(':card_id')
     async update(
         @Param('card_id') card_id: string,
