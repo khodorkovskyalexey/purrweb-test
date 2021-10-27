@@ -8,7 +8,7 @@ import { CardCommentsGuard } from './card-comments.guard';
 import { Comments } from './comments.entity';
 import { CommentsService } from './comments.service';
 import { CreateCommentsDto } from './dto/create-comments.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger'
 
 @ApiTags('Comments module')
 @UseGuards(ColumnCardsGuard)
@@ -18,6 +18,8 @@ export class CommentsController {
         private commentsService: CommentsService
     ) {}
 
+    @ApiParam({ name: 'column_id', description: 'Id cards column', example: '1' })
+    @ApiParam({ name: 'card_id', description: 'Id comments card', example: '1' })
     @ApiOperation({ summary: 'Get all comments by cards id' })
     @ApiResponse({ status: 200, type: [Comments] })
     @Get()
@@ -25,6 +27,9 @@ export class CommentsController {
         return this.commentsService.findAll(card_id);
     }
 
+    @ApiParam({ name: 'column_id', description: 'Id cards column', example: '1' })
+    @ApiParam({ name: 'card_id', description: 'Id comments card', example: '1' })
+    @ApiParam({ name: 'comment_id', description: 'Id finding comment', example: '1' })
     @ApiOperation({ summary: 'Get one comments by id' })
     @ApiResponse({ status: 200, type: Comments })
     @Get(':comment_id')
@@ -32,6 +37,8 @@ export class CommentsController {
         return this.commentsService.findById(comment_id, { relations: ["author"] });
     }
     
+    @ApiParam({ name: 'column_id', description: 'Id cards column', example: '1' })
+    @ApiParam({ name: 'card_id', description: 'Id comments card', example: '1' })
     @ApiOperation({ summary: 'Create new comment' })
     @ApiResponse({ status: 200, type: CreateCommentsDto })
     @UseGuards(CheckJwtGuard, UserColumnsGuard, CardCommentsGuard)
@@ -43,7 +50,10 @@ export class CommentsController {
     ): Promise<CreateCommentsDto> {
         return this.commentsService.create(user, comment_id, comment);
     }
-
+    
+    @ApiParam({ name: 'column_id', description: 'Id cards column', example: '1' })
+    @ApiParam({ name: 'card_id', description: 'Id comments card', example: '1' })
+    @ApiParam({ name: 'comment_id', description: 'Id updating comment', example: '1' })
     @ApiOperation({ summary: 'Update comment' })
     @ApiResponse({ status: 200, type: CreateCommentsDto })
     @UseGuards(CheckJwtGuard, UserColumnsGuard, CardCommentsGuard)
@@ -52,6 +62,9 @@ export class CommentsController {
         return this.commentsService.update(comment_id, commentDto)
     }
 
+    @ApiParam({ name: 'column_id', description: 'Id cards column', example: '1' })
+    @ApiParam({ name: 'card_id', description: 'Id comments card', example: '1' })
+    @ApiParam({ name: 'comment_id', description: 'Id deleting comment', example: '1' })
     @ApiOperation({ summary: 'Delete comment by id' })
     @ApiResponse({ status: 200, type: Boolean })
     @UseGuards(CheckJwtGuard, UserColumnsGuard, CardCommentsGuard)

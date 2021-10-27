@@ -4,7 +4,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { Users } from './user.entity';
 import { UsersService } from './users.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger'
 
 @ApiTags('Users module')
 @Controller('users')
@@ -20,6 +20,7 @@ export class UsersController {
         })
     }
 
+    @ApiParam({ name: 'user_id', description: 'Finding user id', example: '1' })
     @ApiOperation({ summary: 'Get user by id' })
     @ApiResponse({ status: 200, type: Users })
     @Get(':user_id')
@@ -41,6 +42,7 @@ export class UsersController {
         return this.usersService.login(user)
     }
 
+    @ApiParam({ name: 'user_id', description: 'Deleting user id', example: '1' })
     @ApiOperation({ summary: 'Delete user by id' })
     @ApiResponse({ status: 200, type: Boolean })
     @UseGuards(JwtAuthGuard)
@@ -49,6 +51,7 @@ export class UsersController {
         return await this.usersService.delete(id)
     }
 
+    @ApiParam({ name: 'user_id', description: 'Updating user id', example: '1' })
     @ApiOperation({ summary: 'Update user data' })
     @ApiResponse({ status: 200, type: CreateUserDto })
     @UseGuards(JwtAuthGuard)

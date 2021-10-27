@@ -4,7 +4,7 @@ import { Columns } from './columns.entity';
 import { ColumnsService } from './columns.service';
 import { CreateColumnDto } from './dto/create-columns.dto';
 import { UserColumnsGuard } from './user-columns.guard';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger'
 
 @ApiTags('Columns module')
 @Controller('users/:user_id/columns')
@@ -12,6 +12,7 @@ export class ColumnsController {
     constructor(private readonly columnsService: ColumnsService) {
     }
 
+    @ApiParam({ name: 'user_id', description: 'Id columns owner', example: '1' })
     @ApiOperation({ summary: 'Get all columns by authors id' })
     @ApiResponse({ status: 200, type: [Columns] })
     @Get()
@@ -19,6 +20,8 @@ export class ColumnsController {
         return this.columnsService.findUsersColumns(user_id)
     }
 
+    @ApiParam({ name: 'user_id', description: 'Id column owner', example: '1' })
+    @ApiParam({ name: 'column_id', description: 'Finding column id', example: '1' })
     @ApiOperation({ summary: 'Get column by id' })
     @ApiResponse({ status: 200, type: Columns })
     @UseGuards(UserColumnsGuard)
@@ -27,6 +30,7 @@ export class ColumnsController {
         return this.columnsService.findById(column_id)
     }
     
+    @ApiParam({ name: 'user_id', description: 'Id user who creating column', example: '1' })
     @ApiOperation({ summary: 'Create new column' })
     @ApiResponse({ status: 200, type: CreateColumnDto })
     @UseGuards(JwtAuthGuard)
@@ -35,6 +39,8 @@ export class ColumnsController {
         return this.columnsService.create(column, user_id)
     }
 
+    @ApiParam({ name: 'user_id', description: 'Id user who update column', example: '1' })
+    @ApiParam({ name: 'column_id', description: 'Updating column id', example: '1' })
     @ApiOperation({ summary: 'Update column data' })
     @ApiResponse({ status: 200, type: CreateColumnDto })
     @UseGuards(JwtAuthGuard, UserColumnsGuard)
@@ -46,6 +52,8 @@ export class ColumnsController {
         return this.columnsService.update(column, column_id)
     }
 
+    @ApiParam({ name: 'user_id', description: 'Id user who delete column', example: '1' })
+    @ApiParam({ name: 'column_id', description: 'Deleting column id', example: '1' })
     @ApiOperation({ summary: 'Delete column by id' })
     @ApiResponse({ status: 200, type: Boolean })
     @UseGuards(JwtAuthGuard, UserColumnsGuard)
