@@ -7,6 +7,7 @@ import * as bcrypt from 'bcryptjs'
 import { AuthException } from '../exceptions/auth.exception';
 import { AuthService } from './auth.service';
 import { AuthUsersDto } from './dtos/auth-user.dto';
+import { ReturnUserDto } from './dtos/return-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -55,7 +56,7 @@ export class UsersService {
         return true
     }
 
-    async update(id: string, userDto: CreateUserDto): Promise<CreateUserDto> {
+    async update(id: string, userDto: CreateUserDto): Promise<ReturnUserDto> {
         const candidate = await this.findByEmail(userDto.email)
         if(candidate && candidate.id !== Number(id)) {
             throw AuthException.BadRequest(`User with email: ${userDto.email} already exists`);
@@ -64,6 +65,6 @@ export class UsersService {
         const hash_password = await bcrypt.hash(userDto.password, 10)
         const updatedUser = new CreateUserDto({ ...userDto, password: hash_password })
         await this.usersRepository.update(id, updatedUser)
-        return updatedUser
+        return new ReturnUserDto(userDto)
     }
 }

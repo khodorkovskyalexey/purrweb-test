@@ -5,6 +5,7 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { Users } from './user.entity';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger'
+import { ReturnUserDto } from './dtos/return-user.dto';
 
 @ApiTags('Users module')
 @Controller('users')
@@ -53,10 +54,10 @@ export class UsersController {
 
     @ApiParam({ name: 'user_id', description: 'Updating user id', example: '1' })
     @ApiOperation({ summary: 'Update user data' })
-    @ApiResponse({ status: 200, type: CreateUserDto })
+    @ApiResponse({ status: 200, type: ReturnUserDto })
     @UseGuards(JwtAuthGuard)
     @Put(':user_id')
-    async updateUser(@Param('user_id') id: string, @Body() user: CreateUserDto): Promise<CreateUserDto> {
+    async updateUser(@Param('user_id') id: string, @Body() user: CreateUserDto): Promise<ReturnUserDto> {
         return await this.usersService.update(id, user)
     }
 }
