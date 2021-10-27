@@ -12,11 +12,11 @@ export class ColumnsService {
         private userService: UsersService,
         ) {}
 
-    async getById(column_id: string, options = {}): Promise<Columns> {
+    async findById(column_id: string, options = {}): Promise<Columns> {
         return await this.columnsRepository.findOne(column_id, options)
     }
 
-    async getUsersColumns(user_id: string): Promise<CreateColumnDto[]> {
+    async findUsersColumns(user_id: string): Promise<Columns[]> {
         return await this.columnsRepository.find({
             where: {
                 user: {

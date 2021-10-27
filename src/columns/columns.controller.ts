@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/users/jwt-auth.guard';
+import { Columns } from './columns.entity';
 import { ColumnsService } from './columns.service';
 import { CreateColumnDto } from './dto/create-columns.dto';
 import { UserColumnsGuard } from './user-columns.guard';
@@ -10,13 +11,13 @@ export class ColumnsController {
     }
     
     @Get()
-    async getUsersColumns(@Param('user_id') user_id: string): Promise<CreateColumnDto[]> {
-        return this.columnsService.getUsersColumns(user_id)
+    async findUsersColumns(@Param('user_id') user_id: string): Promise<Columns[]> {
+        return this.columnsService.findUsersColumns(user_id)
     }
 
     @Get(':column_id')
-    async getUserColumnById(@Param('column_id') column_id: string) {
-        return this.columnsService.getById(column_id)
+    async findUserColumnById(@Param('column_id') column_id: string): Promise<Columns> {
+        return this.columnsService.findById(column_id)
     }
     
     @UseGuards(JwtAuthGuard)
@@ -28,16 +29,15 @@ export class ColumnsController {
     @UseGuards(JwtAuthGuard, UserColumnsGuard)
     @Put(':column_id')
     async update(
-        @Param('user_id') user_id: string,
         @Param('column_id') column_id: string,
         @Body() column: CreateColumnDto
-    ) {
+    ): Promise<CreateColumnDto> {
         return this.columnsService.update(column, column_id)
     }
 
     @UseGuards(JwtAuthGuard, UserColumnsGuard)
     @Delete(':column_id')
-    async delete(@Param('user_id') user_id: string, @Param('column_id') column_id: string) {
+    async delete(@Param('column_id') column_id: string): Promise<boolean> {
         return this.columnsService.delete(column_id)
     }
 }

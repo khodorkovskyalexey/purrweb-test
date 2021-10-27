@@ -1,5 +1,4 @@
-import { CanActivate, ExecutionContext, HttpCode, HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Observable } from "rxjs";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { AuthException } from "src/exceptions/auth.exception";
 import { ColumnsService } from "./columns.service";
 
@@ -12,7 +11,7 @@ export class UserColumnsGuard implements CanActivate {
         try {
             const { user } = req;
             
-            const column = await this.columnService.getById(req.params.column_id, { relations: ["user"] })
+            const column = await this.columnService.findById(req.params.column_id, { relations: ["user"] })
             const isColumnBelongToUser: boolean = column.user?.id === user.id;
             if(!isColumnBelongToUser) {
                 throw AuthException.Forbidden()
