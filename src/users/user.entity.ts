@@ -1,4 +1,5 @@
-import { Columns } from "src/columns/columns.entity";
+import { Columns } from "../columns/columns.entity";
+import { Comments } from "../comments/comments.entity";
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany } from "typeorm";
 
 @Entity()   
@@ -14,6 +15,9 @@ export class Users {
 
     @OneToMany(type => Columns, columns => columns.user, { cascade: true })
     columns: Columns;
+
+    @OneToMany(type => Comments, comments => comments.author, { cascade: true })
+    comments: Comments[];
 
     @CreateDateColumn()
     createdAt: Date;

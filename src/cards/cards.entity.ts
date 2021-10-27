@@ -1,5 +1,6 @@
 import { Columns } from "../columns/columns.entity";
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne, OneToMany } from "typeorm";
+import { Comments } from "../comments/comments.entity";
 
 @Entity()   
 export class Cards {
@@ -12,8 +13,11 @@ export class Cards {
     @Column()
     description: string;
 
-    @ManyToOne(Cards => Columns, column => column.cards, { onDelete: 'CASCADE' })
+    @ManyToOne(type => Columns, column => column.cards, { onDelete: 'CASCADE' })
     column: Columns;
+    
+    @OneToMany(type => Comments, comments => comments.card, { cascade: true })
+    comments: Comments[];
 
     @CreateDateColumn()
     createdAt: Date;

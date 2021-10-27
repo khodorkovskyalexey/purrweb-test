@@ -12,7 +12,7 @@ export class UsersController {
     @Get()
     async findAll(): Promise<Users[]> {
         return await this.usersService.findAll({
-            relations: ["columns", "columns.cards"]
+            relations: ["columns", "columns.cards", "comments"]
         })
     }
 
