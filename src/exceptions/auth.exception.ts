@@ -12,11 +12,11 @@ export class AuthException extends HttpException {
         return new AuthException(HttpStatus.UNAUTHORIZED, 'User is not logged in');
     }
 
-    static BadRequest(message, errors = []) {
+    static BadRequest(message: string, errors = []) {
         return new AuthException(HttpStatus.BAD_REQUEST, message, errors);
     }
 
-    static Forbidden() {
-        return new AuthException(HttpStatus.FORBIDDEN, "This column is not belong to this user")
+    static Forbidden(message: string) {
+        return new AuthException(HttpStatus.FORBIDDEN, message)
     }
 }

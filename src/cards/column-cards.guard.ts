@@ -14,12 +14,12 @@ export class ColumnCardsGuard implements CanActivate {
         try {
             const card = await this.cardsSerivce.findById(req.params.card_id, { relations: ["column"] })
             if(card.column.id !== Number(req.params.column_id)) {
-                throw AuthException.Forbidden()
+                throw AuthException.Forbidden("This card is not belong to this column")
             }
 
             return true;
         } catch (error) {
-            throw AuthException.Forbidden()
+            throw AuthException.Forbidden("This card is not belong to this column")
         }
     }
 }
