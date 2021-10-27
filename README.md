@@ -24,7 +24,7 @@
 
 ## API docs
 
-[Swagger docs](localhost:3000/docs)
+[Swagger docs](http://localhost:3000/docs)
 
 ## Description
 

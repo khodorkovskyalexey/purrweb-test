@@ -38,3 +38,6 @@ lerna-debug.log*
 .env
 .env.production
 .env.develop
+
+# database scheme
+purrweb-test_database.pdf
