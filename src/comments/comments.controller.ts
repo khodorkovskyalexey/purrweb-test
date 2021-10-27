@@ -2,15 +2,15 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nes
 import { ColumnCardsGuard } from 'src/cards/column-cards.guard';
 import { UserColumnsGuard } from 'src/columns/user-columns.guard';
 import { CheckJwtGuard } from 'src/users/check-jwt.guatd';
-import { JwtAuthGuard } from 'src/users/jwt-auth.guard';
 import { User } from 'src/users/user.decorator';
 import { Users } from 'src/users/user.entity';
+import { CardCommentsGuard } from './card-comments.guard';
 import { Comments } from './comments.entity';
 import { CommentsService } from './comments.service';
 import { CreateCommentsDto } from './dto/create-comments.dto';
 
 @UseGuards(ColumnCardsGuard)
-@Controller('users/:user_id/columns/:column_id/cards/:card_id/comments')
+@Controller('columns/:column_id/cards/:card_id/comments')
 export class CommentsController {
     constructor(
         private commentsService: CommentsService
@@ -26,7 +26,7 @@ export class CommentsController {
         return this.commentsService.findById(comment_id, { relations: ["author"] });
     }
     
-    @UseGuards(CheckJwtGuard, UserColumnsGuard)
+    @UseGuards(CheckJwtGuard, UserColumnsGuard, CardCommentsGuard)
     @Post()
     async create(
         @Body() comment: CreateCommentsDto,
@@ -36,13 +36,13 @@ export class CommentsController {
         return this.commentsService.create(user, comment_id, comment);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(CheckJwtGuard, UserColumnsGuard, CardCommentsGuard)
     @Put(':comment_id')
     async update(@Body() commentDto: CreateCommentsDto, @Param('comment_id') comment_id: string): Promise<CreateCommentsDto> {
         return this.commentsService.update(comment_id, commentDto)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(CheckJwtGuard, UserColumnsGuard, CardCommentsGuard)
     @Delete(':comment_id')
     async delete(@Param('comment_id') comment_id: string): Promise<boolean> {
         return this.commentsService.delete(comment_id)
