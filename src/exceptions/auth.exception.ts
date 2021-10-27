@@ -9,10 +9,14 @@ export class AuthException extends HttpException {
     }
 
     static UnauthorizedError() {
-        return new AuthException(HttpStatus.UNAUTHORIZED, 'Пользователь не авторизован')
+        return new AuthException(HttpStatus.UNAUTHORIZED, 'User is not logged in');
     }
 
     static BadRequest(message, errors = []) {
         return new AuthException(HttpStatus.BAD_REQUEST, message, errors);
+    }
+
+    static Forbidden() {
+        return new AuthException(HttpStatus.FORBIDDEN, "This column is not belong to this user")
     }
 }
