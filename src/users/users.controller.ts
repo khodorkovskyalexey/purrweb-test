@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes } 
 import { AuthUsersDto } from './dtos/auth-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { User } from './user.entity';
+import { Users } from './user.entity';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -10,15 +10,18 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Get()
-    async findAll(): Promise<User[]> {
-        return await this.usersService.findAll()
+    async findAll(): Promise<Users[]> {
+        return await this.usersService.findAll({
+            relations: ["columns", "columns.cards"]
+        })
     }
 
     @Get(':user_id')
-    async findUserById(@Param('user_id') id: string): Promise<User> {
+    async findUserById(@Param('user_id') id: string): Promise<Users> {
         return await this.usersService.findById(id)
     }
 
+    //по тз
     @Post()
     async register(@Body() user: CreateUserDto): Promise<AuthUsersDto> {
         return this.usersService.create(user)
