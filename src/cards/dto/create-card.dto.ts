@@ -1,11 +1,12 @@
-import { IsString, Length } from "class-validator"
+import { IsString, Length } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCardDto {
+  @ApiProperty({ example: 'Do homework', description: 'Title of card' })
   @IsString({ message: "Must be string" })
   @Length(4, 32, { message: "Must be from 4 to 32" })
   readonly title: string;
 
-  @IsString({ message: "Must be string" })
-  @Length(8, 256, { message: "Must be from 8 to 256" })
-  readonly description: string;
+  @ApiProperty({ example: 'You should do your math homework', description: 'Description of card', required: false })
+  readonly description?: string;
 }
