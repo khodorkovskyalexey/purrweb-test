@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { User } from './user.entity';
+import { Users } from './user.entity';
 import * as bcrypt from 'bcryptjs'
 import { AuthException } from '../exceptions/auth.exception';
 import { AuthService } from './auth.service';
@@ -12,21 +12,21 @@ import { AuthUsersDto } from './dtos/auth-user.dto';
 export class UsersService {
 
     constructor(
-        @InjectRepository(User) private usersRepository: Repository<User>,
+        @InjectRepository(Users) private usersRepository: Repository<Users>,
         private readonly authService: AuthService
         ) {}
 
-    async findAll(): Promise<User[]> {
+    async findAll(): Promise<Users[]> {
         return await this.usersRepository.find({
             relations: ["columns"]
         });
     }
 
-    async findById(id: string): Promise<User> {
+    async findById(id: string): Promise<Users> {
         return await this.usersRepository.findOne(id);
     }
 
-    async findByEmail(email: string): Promise<User> {
+    async findByEmail(email: string): Promise<Users> {
         return await this.usersRepository.findOne({ where: { email } })
     }
 

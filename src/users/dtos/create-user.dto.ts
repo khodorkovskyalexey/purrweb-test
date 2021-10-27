@@ -1,5 +1,4 @@
 import { IsEmail, IsString, Length } from "class-validator"
-import { User } from "../user.entity"
 
 export class CreateUserDto {
   @IsString({ message: "Must be string" })

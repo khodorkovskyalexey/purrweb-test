@@ -1,5 +1,5 @@
-import { User } from "src/users/user.entity";
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne } from "typeorm";
+import { Users } from "../users/user.entity";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne, OneToMany } from "typeorm";
 
 @Entity()   
 export class Columns {
@@ -9,8 +9,8 @@ export class Columns {
     @Column({ nullable: false })
     name: string;
 
-    @ManyToOne(type => User, user => user.columns, { onDelete: 'CASCADE' })
-    user: User;
+    @ManyToOne(type => Users, user => user.columns, { onDelete: 'CASCADE' })
+    user: Users;
 
     @CreateDateColumn()
     createdAt: Date;

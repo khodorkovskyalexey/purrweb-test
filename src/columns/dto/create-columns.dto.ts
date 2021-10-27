@@ -1,6 +1,6 @@
 import { IsString } from "class-validator"
 
 export class CreateColumnDto {
-  @IsString()
+  @IsString({ message: "Must be string" })
   readonly name: string;
 }
