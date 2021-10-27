@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from "typeorm";
+import { Columns } from "src/columns/columns.entity";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany } from "typeorm";
 
 @Entity()   
 export class User {
@@ -10,6 +11,9 @@ export class User {
 
     @Column({ nullable: false })
     password: string;
+
+    @OneToMany(type => Columns, columns => columns.user, { cascade: true })
+    columns: Columns;
 
     @CreateDateColumn()
     createdAt: Date;

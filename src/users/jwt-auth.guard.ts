@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, HttpCode, HttpStatus, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { JwtService } from "@nestjs/jwt";
-import { AuthException } from "src/exceptions/auth.exception";
-import { User } from "src/users/user.entity";
+import { AuthException } from "../exceptions/auth.exception";
+import { User } from "./user.entity";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -25,6 +25,7 @@ export class JwtAuthGuard implements CanActivate {
             const isIdEquals: boolean = user.id === Number(user_id)
 
             if(!user_id || !isIdEquals) {
+                
                 throw AuthException.UnauthorizedError();
             }
             req.user = user;

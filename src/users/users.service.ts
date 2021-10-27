@@ -4,37 +4,68 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcryptjs'
+import { AuthException } from '../exceptions/auth.exception';
+import { AuthService } from './auth.service';
+import { AuthUsersDto } from './dtos/auth-user.dto';
 
 @Injectable()
 export class UsersService {
 
-    constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
+    constructor(
+        @InjectRepository(User) private usersRepository: Repository<User>,
+        private readonly authService: AuthService
+        ) {}
 
-    async getAll(): Promise<User[]> {
-        return await this.usersRepository.find();
+    async findAll(): Promise<User[]> {
+        return await this.usersRepository.find({
+            relations: ["columns"]
+        });
     }
 
-    async getById(id: string): Promise<User> {
+    async findById(id: string): Promise<User> {
         return await this.usersRepository.findOne(id);
     }
 
-    async findByEmail(email: string) {
+    async findByEmail(email: string): Promise<User> {
         return await this.usersRepository.findOne({ where: { email } })
     }
 
-    async create(userDto: CreateUserDto) {
-        const user = await this.usersRepository.create(userDto);
+    async login(userDto: CreateUserDto): Promise<AuthUsersDto> {
+        const user = await this.findByEmail(userDto.email)
+        const isPasswordEquals = await bcrypt.compare(userDto.password, user.password)
+        if(user && isPasswordEquals) {
+            return this.authService.generateResponse(user)
+        }
+        throw AuthException.UnauthorizedError()
+    }
+
+    async create(userDto: CreateUserDto): Promise<AuthUsersDto> {
+        const candidate = await this.findByEmail(userDto.email)
+        if(candidate) {
+            throw AuthException.BadRequest(`User with email: ${userDto.email} already exists`);
+        }
+
+        const hash_password = await bcrypt.hash(userDto.password, 10);
+        const user = await this.usersRepository.create({ ...userDto, password: hash_password });
         await this.usersRepository.save(user);
-        return user;
+        
+        return this.authService.generateResponse(user)
     }
 
-    async delete(id: string) {
-        return await this.usersRepository.delete(id);
+    async delete(id: string): Promise<boolean> {
+        await this.usersRepository.delete(id);
+        return true
     }
 
-    async update(id: string, new_user_data: CreateUserDto) {
-        const hash_password = await bcrypt.hash(new_user_data.password, 10)
-        new_user_data.password = hash_password
-        return await this.usersRepository.update(id, new_user_data)
+    async update(id: string, userDto: CreateUserDto): Promise<CreateUserDto> {
+        const candidate = await this.findByEmail(userDto.email)
+        if(candidate && candidate.id !== Number(id)) {
+            throw AuthException.BadRequest(`User with email: ${userDto.email} already exists`);
+        }
+
+        const hash_password = await bcrypt.hash(userDto.password, 10)
+        const updatedUser = new CreateUserDto({ ...userDto, password: hash_password })
+        await this.usersRepository.update(id, updatedUser)
+        return updatedUser
     }
 }
